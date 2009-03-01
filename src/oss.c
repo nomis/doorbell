@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
 		now = getTime();
 		if (status >= 0) {
 			printf("Read %u bytes in %8.3fms", status, (double)(now-then)/1000);
-			process_input(buf, sizeof(buf), now, (1000000/(RATE*(SIZE/8))));
+			process_input(buf, status, now, (1000000/(RATE*(SIZE/8))));
 		} else if (status == -1) {
 			perror("SOUND_PCM_SYNC ioctl failed");
 		}
