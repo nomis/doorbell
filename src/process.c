@@ -25,7 +25,6 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 			/* ding dong! */
 			if (last == 0 || now - last >= (unsigned long long)1e6) {
 				ring++;
-				last = now;
 
 				printf(", <fork>");
 				if (fork() == 0) {
@@ -43,6 +42,7 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 						printf(", <exit %d>", (signed char)status);
 				}
 			}
+			last = now;
 		}
 	}
 	printf(", min=%d, max=%d, last=%llu, ring=%d\n", min, max, last, ring);
