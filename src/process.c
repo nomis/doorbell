@@ -7,7 +7,7 @@
 #include <sys/wait.h>
 #include <time.h>
 
-static unsigned long long last = 0;
+static unsigned long long last = ~0;
 
 void process_input(unsigned char *buf, int buflen, unsigned long long time, unsigned long long persample) {
 	int i;
@@ -23,7 +23,7 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 
 		if (buf[i] < 126 || buf[i] > 130) {
 			/* ding dong! */
-			if (last == 0 || (now - last >= 200000 && now > last)) {
+			if (now > last && now - last >= 200000) {
 				ring++;
 
 				printf(", <fork>");
@@ -45,5 +45,7 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 			last = now;
 		}
 	}
+	if (last == ~0)
+		last = 0;
 	printf(", min=%d, max=%d, last=%llu, ring=%d\n", min, max, last, ring);
 }
