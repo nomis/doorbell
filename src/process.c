@@ -21,7 +21,7 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 
 		now += persample;
 
-		if (buf[i] <= 124 || buf[i] >= 132) {
+		if (buf[i] < 126 || buf[i] > 130) {
 			/* ding dong! */
 			if (last == 0 || (now - last >= 200000 && now > last)) {
 				ring++;
