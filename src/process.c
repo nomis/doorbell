@@ -23,14 +23,14 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 
 		if (buf[i] <= 112 || buf[i] >= 144) {
 			/* ding dong! */
-			if (last == 0 || now - last >= (unsigned long long)1e6) {
+			if (last == 0 || now - last >= 1000000) {
 				ring++;
 
 				printf(", <fork>");
 				if (fork() == 0) {
 					char arg1[31];
 					char arg2[21];
-					time_t tmp = now/1e6;
+					time_t tmp = now/1000000;
 					strftime(arg1, 30, "%Y-%m-%d %H:%M:%S", localtime(&tmp));
 					snprintf(arg2, 20, "%llu", now % (unsigned long long)1e6);
 
