@@ -23,7 +23,7 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 
 		if (buf[i] <= 112 || buf[i] >= 144) {
 			/* ding dong! */
-			if (last == 0 || (now - last >= 1000000 && now > last)) {
+			if (last == 0 || (now - last >= 200000 && now > last)) {
 				ring++;
 
 				printf(", <fork>");
