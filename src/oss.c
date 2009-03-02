@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <linux/soundcard.h>
 
-#define LENGTH 1	/* how many seconds of speech to store */
+#define LENGTH 8192	/* how many samples of audio to store */
 #define RATE 8000	/* the sampling rate */
 #define SIZE 8		/* sample size: 8 or 16 bits */
 #define CHANNELS 1	/* 1 = mono 2 = stereo */
@@ -16,7 +16,7 @@ extern void process_input(unsigned char *buf, int buflen, unsigned long long tim
 
 int main(int argc, char *argv[]) {
 	/* this buffer holds the digitized audio */
-	unsigned char buf[LENGTH*RATE*SIZE*CHANNELS/8];
+	unsigned char buf[LENGTH*SIZE*CHANNELS/8];
 	int fd;		/* sound device file descriptor */
 	int arg;	/* argument for ioctl calls */
 	int status;	/* return status of system calls */
@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
 			printf("Read %u bytes in %8.3fms", status, (double)(now-then)/1000);
 			process_input(buf, status, now, (1000000/(RATE*(SIZE/8))));
 		} else if (status == -1) {
-			perror("SOUND_PCM_SYNC ioctl failed");
+			perror("Read failed");
 		}
 	}
 }
