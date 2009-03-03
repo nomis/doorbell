@@ -54,7 +54,7 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 	}
 
 #if SAVE
-	if (!nosave && (min != 128 || max != 128)) {
+	if (!nosave && (min != 128 || max != 128) && fork() == 0) {
 		char fname[21];
 		int fd;
 
@@ -65,6 +65,7 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 			write(fd, buf, buflen);
 			close(fd);
 		}
+		_exit(0);
 	}
 #endif
 
