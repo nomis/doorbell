@@ -13,10 +13,13 @@ static unsigned long long last = ~0;
 
 void process_input(unsigned char *buf, int buflen, unsigned long long time, unsigned long long persample, int nosave) {
 	int i;
+	int status;
 	unsigned int min = ~0, max = 0, ring = 0;
 	unsigned long long now = time - persample*buflen;
 
 	printf(", now %llu", now);
+	if (waitpid(-1, &status, WNOHANG) > 0)
+		printf(", <exit %d>", (signed char)status);
 	for (i = 0; i < buflen; i++) {
 		if (buf[i] < min)
 			min = buf[i];
@@ -43,10 +46,6 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 
 					execlp("./dingdong", "dingdong", arg1, arg2, arg3, NULL);
 					_exit(1);
-				} else {
-					int status;
-					if (waitpid(-1, &status, WNOHANG) > 0)
-						printf(", <exit %d>", (signed char)status);
 				}
 			}
 			last = now;
