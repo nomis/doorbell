@@ -27,7 +27,7 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 
 		if (buf[i] < 126 || buf[i] > 130) {
 			/* ding dong! */
-			if (now > last && now - last >= 500000) {
+			if (now > last && now - last >= 400000) {
 				printf(", gap %llu", now - last);
 				ring++;
 
