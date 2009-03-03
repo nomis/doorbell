@@ -11,11 +11,12 @@ static unsigned long long last = ~0;
 
 #define SAVE 1
 
-void process_input(unsigned char *buf, int buflen, unsigned long long time, unsigned long long persample) {
+void process_input(unsigned char *buf, int buflen, unsigned long long time, unsigned long long persample, int nosave) {
 	int i;
 	unsigned int min = ~0, max = 0, ring = 0;
 	unsigned long long now = time - persample*buflen;
 
+	printf(", now %llu", now);
 	for (i = 0; i < buflen; i++) {
 		if (buf[i] < min)
 			min = buf[i];
@@ -53,7 +54,7 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 	}
 
 #if SAVE
-	if (min != 128 || max != 128) {
+	if (!nosave && (min != 128 || max != 128)) {
 		char fname[21];
 		int fd;
 

@@ -1,5 +1,5 @@
 OBJS=oss.o time.o process.o
-TEST_OBJS=test.o time.o process.o
+TEST_OBJS=test.o process.o
 CFLAGS=-Wall
 
 all: doorbelld test

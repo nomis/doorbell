@@ -11,14 +11,14 @@
 #define CHANNELS 1	/* 1 = mono 2 = stereo */
 #define BUFSIZE (LENGTH*SIZE*CHANNELS/8)
 
-extern unsigned long long getTime();
-extern void process_input(unsigned char *buf, int buflen, unsigned long long time, unsigned long long persample);
+extern void process_input(unsigned char *buf, int buflen, unsigned long long time, unsigned long long persample, int nosave);
 
-unsigned long long now;
-
-void readfile(char *fname) {
+void readfile(unsigned long long now) {
 	unsigned char buf[BUFSIZE];
+	char fname[21];
 	int fd, status;
+
+	snprintf(fname, 20, "%llu", now);
 
 	/* open sound device */
 	fd = open(fname, O_RDONLY);
@@ -31,7 +31,7 @@ void readfile(char *fname) {
 	now += BUFSIZE * (1000000/(RATE*(SIZE/8)));
 	if (status == BUFSIZE) {
 		printf("Read %u bytes", status);
-		process_input(buf, status, now, (1000000/(RATE*(SIZE/8))));
+		process_input(buf, status, now, (1000000/(RATE*(SIZE/8))), 1);
 	} else if (status == -1) {
 		perror("Read failed");
 	}
@@ -40,13 +40,11 @@ void readfile(char *fname) {
 }
 
 int main(int argc, char *argv[]) {
-	now = getTime();
-
-	readfile("1236047295328452");
-	readfile("1236069790091182");
-	readfile("1236072695893112");
-	readfile("1236072700757055");
-	readfile("1236072705621376");
+	readfile(1236047295328452ull);
+	readfile(1236069790091182ull);
+	readfile(1236072695893112ull);
+	readfile(1236072700757055ull);
+	readfile(1236072705621376ull);
 
 	return 0;
 }

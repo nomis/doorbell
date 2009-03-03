@@ -12,7 +12,7 @@
 #define CHANNELS 1	/* 1 = mono 2 = stereo */
 
 extern unsigned long long getTime();
-extern void process_input(unsigned char *buf, int buflen, unsigned long long time, unsigned long long persample);
+extern void process_input(unsigned char *buf, int buflen, unsigned long long time, unsigned long long persample, int nosave);
 
 int main(int argc, char *argv[]) {
 	/* this buffer holds the digitized audio */
@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
 		now = getTime();
 		if (status >= 0) {
 			printf("Read %u bytes in %8.3fms", status, (double)(now-then)/1000);
-			process_input(buf, status, now, (1000000/(RATE*(SIZE/8))));
+			process_input(buf, status, now, (1000000/(RATE*(SIZE/8))), 0);
 		} else if (status == -1) {
 			perror("Read failed");
 		}
