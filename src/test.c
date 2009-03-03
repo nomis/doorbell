@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define LENGTH (2<<12)	/* how many samples of audio to store */
+#define LENGTH (2<<14)	/* how many samples of audio to store */
 #define RATE 8000	/* the sampling rate */
 #define SIZE 8		/* sample size: 8 or 16 bits */
 #define CHANNELS 1	/* 1 = mono 2 = stereo */
@@ -42,15 +42,11 @@ void readfile(char *fname) {
 int main(int argc, char *argv[]) {
 	now = getTime();
 
-	readfile("1235988436651746");
-	readfile("1235989354421965");
-	readfile("1235989355446039");
-	readfile("1235989356470112");
-	readfile("1235989357494183");
-	readfile("1235989358518255");
-	readfile("1235989359542324");
-	readfile("1235989360566396");
-	readfile("1235989368758957");
+	readfile("1236047295328452");
+	readfile("1236069790091182");
+	readfile("1236072695893112");
+	readfile("1236072700757055");
+	readfile("1236072705621376");
 
 	return 0;
 }

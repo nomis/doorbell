@@ -26,18 +26,21 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 
 		if (buf[i] < 126 || buf[i] > 130) {
 			/* ding dong! */
-			if (now > last && now - last >= 400000) {
+			if (now > last && now - last >= 500000) {
+				printf(", gap %llu", now - last);
 				ring++;
 
 				printf(", <fork>");
 				if (fork() == 0) {
 					char arg1[31];
 					char arg2[21];
+					char arg3[21];
 					time_t tmp = now/1000000;
 					strftime(arg1, 30, "%Y-%m-%d %H:%M:%S", localtime(&tmp));
-					snprintf(arg2, 20, "%llu", now % (unsigned long long)1e6);
+					snprintf(arg2, 20, "%llu", now % 1000000);
+					snprintf(arg3, 20, "%llu", now - last);
 
-					execlp("./dingdong", "dingdong", arg1, arg2, NULL);
+					execlp("./dingdong", "dingdong", arg1, arg2, arg3, NULL);
 					_exit(1);
 				} else {
 					int status;
