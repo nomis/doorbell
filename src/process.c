@@ -45,7 +45,7 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 
 		now += persample;
 
-		if (buf[i] < 126 || buf[i] > 130) {
+		if (buf[i] < 125 || buf[i] > 131) {
 			/* ding dong! */
 			if (now > last && now - last >= 400000) {
 				printf(", gap %llu", now - last);
