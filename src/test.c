@@ -57,11 +57,9 @@ void readfile(unsigned long long now) {
 }
 
 int main(int argc, char *argv[]) {
-	readfile(1236047295328452ull);
-	readfile(1236069790091182ull);
-	readfile(1236072695893112ull);
-	readfile(1236072700757055ull);
-	readfile(1236072705621376ull);
+	readfile(0ull);
+	readfile(1237022941683508ull);
+	readfile(1237022945779902ull);
 
 	return 0;
 }

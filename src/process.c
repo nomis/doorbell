@@ -25,6 +25,7 @@
 #include <time.h>
 
 static unsigned long long last = ~0;
+static unsigned long long burst = 0;
 
 #define SAVE 1
 
@@ -45,7 +46,11 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 
 		now += persample;
 
-		if (buf[i] < 125 || buf[i] > 131) {
+		if (buf[i] < 126 || buf[i] > 130) {
+			burst++;
+			if (burst < 5)
+				continue;
+
 			/* ding dong! */
 			if (now > last && now - last >= 400000) {
 				printf(", gap %llu", now - last);
@@ -66,6 +71,8 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 				}
 			}
 			last = now;
+		} else {
+			burst = 0;
 		}
 	}
 
