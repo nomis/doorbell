@@ -38,6 +38,8 @@ int main(int argc, char *argv[]) {
 	int arg;	/* argument for ioctl calls */
 	int status;	/* return status of system calls */
 	unsigned long long then, now;
+	(void)argc;
+	(void)argv;
 
 	/* open sound device */
 	fd = open("/dev/dsp", O_RDONLY);

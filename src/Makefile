@@ -1,6 +1,6 @@
-OBJS=oss.o time.o process.o
-TEST_OBJS=test.o process.o
-CFLAGS=-Wall
+OBJS=oss.o time.o exec.o process.o
+TEST_OBJS=test.o time.o process.o
+CFLAGS=-Wall -Wshadow -Wextra -ggdb
 
 all: doorbelld test
 
@@ -11,4 +11,4 @@ test: $(TEST_OBJS)
 	$(CC) $(CFLAGS) -o $@ $(TEST_OBJS)
 
 clean:
-	rm -f doorbelld *.o
+	rm -f doorbelld test *.o

@@ -24,20 +24,25 @@
 #include <sys/wait.h>
 #include <time.h>
 
-static unsigned long long last = ~0;
+static unsigned long long last = ~0ULL;
+static unsigned long long start = 0;
 static unsigned long long burst = 0;
 
 #define SAVE 1
 
-void process_input(unsigned char *buf, int buflen, unsigned long long time, unsigned long long persample, int nosave) {
+extern void do_ring(unsigned long long last, unsigned long long now);
+
+void process_input(unsigned char *buf, int buflen, unsigned long long sampletime, unsigned long long persample, int test) {
 	int i;
 	int status;
 	unsigned int min = ~0, max = 0, ring = 0;
-	unsigned long long now = time - persample*buflen;
+	unsigned long long now = sampletime - persample*buflen;
 
-	printf(", now %llu", now);
+	if (!test)
+		printf(", now %llu", now);
 	if (waitpid(-1, &status, WNOHANG) > 0)
-		printf(", <exit %d>", (signed char)status);
+		if (!test)
+			printf(", <exit %d>", (signed char)status);
 	for (i = 0; i < buflen; i++) {
 		if (buf[i] < min)
 			min = buf[i];
@@ -53,22 +58,11 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 
 			/* ding dong! */
 			if (now > last && now - last >= 400000) {
-				printf(", gap %llu", now - last);
+				if (!test)
+					printf(", gap %llu", now - last);
 				ring++;
 
-				printf(", <fork>");
-				if (fork() == 0) {
-					char arg1[31];
-					char arg2[21];
-					char arg3[21];
-					time_t tmp = now/1000000;
-					strftime(arg1, 30, "%Y-%m-%d %H:%M:%S", localtime(&tmp));
-					snprintf(arg2, 20, "%llu", now % 1000000);
-					snprintf(arg3, 20, "%llu", now - last);
-
-					execlp("./dingdong", "dingdong", arg1, arg2, arg3, NULL);
-					_exit(1);
-				}
+				do_ring(last, start);
 			}
 			last = now;
 		} else {
@@ -77,11 +71,11 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 	}
 
 #if SAVE
-	if (!nosave && (min != 128 || max != 128) && fork() == 0) {
+	if (!test && (min != 128 || max != 128) && fork() == 0) {
 		char fname[21];
 		int fd;
 
-		snprintf(fname, 20, "%llu", time - persample*buflen);
+		snprintf(fname, 20, "%llu", sampletime - persample*buflen);
 
 		fd = open(fname, O_WRONLY|O_CREAT|O_TRUNC, 0644);
 		if (fd) {
@@ -92,8 +86,9 @@ void process_input(unsigned char *buf, int buflen, unsigned long long time, unsi
 	}
 #endif
 
-	if (last == ~0)
+	if (last == ~0ULL)
 		last = 0;
 
-	printf(", min=%d, max=%d, last=%llu, ring=%d\n", min, max, last, ring);
+	if (!test)
+		printf(", min=%d, max=%d, last=%llu, ring=%d\n", min, max, last, ring);
 }
