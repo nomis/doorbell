@@ -112,7 +112,7 @@ void readfile(unsigned long long now) {
 
 	now += BUFSIZE * (1000000/(RATE*(SIZE/8)));
 	if (status == BUFSIZE) {
-//		printf("Read %u bytes\n", status);
+//		printf("Read %u bytes from %s\n", status, fname);
 		process_input(buf, status, now, (1000000/(RATE*(SIZE/8))), 1);
 	} else if (status == -1) {
 		perror("Read failed\n");
@@ -150,15 +150,19 @@ int main(int argc, char *argv[]) {
 	}
 	fclose(fd);
 
-	readfile(0ull);
 	n = scandir("data/", &list, 0, alphasort);
 	if (n < 0) {
 		perror("scandir");
 		exit(1);
 	} else {
+		unsigned long long last = 0;
+
 		for (i = 0; i < n; i++) {
 			now = strtoull(list[i]->d_name, NULL, 10);
 			if (now > 0) {
+				if (now - last - 4096000 > 4096)
+					readfile(0ull);
+				last = now;
 				printf(".");
 				readfile(now);
 				fflush(stdout);
