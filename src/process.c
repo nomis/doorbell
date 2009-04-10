@@ -27,6 +27,7 @@
 static unsigned long long last = ~0ULL;
 static unsigned long long start = 0;
 static unsigned long long burst = 0;
+static unsigned char prev = 128;
 
 #define SAVE 1
 
@@ -52,8 +53,12 @@ void process_input(unsigned char *buf, int buflen, unsigned long long sampletime
 		now += persample;
 
 		if (buf[i] < 126 || buf[i] > 130) {
-			burst++;
-			if (burst < 5)
+			if (start == 0)
+				start = now;
+			if (buf[i] != prev)
+				burst++;
+			prev = buf[i];
+			if (burst < 25)
 				continue;
 
 			/* ding dong! */
@@ -63,10 +68,19 @@ void process_input(unsigned char *buf, int buflen, unsigned long long sampletime
 				ring++;
 
 				do_ring(last, start);
+				start = 0;
 			}
 			last = now;
 		} else {
-			burst = 0;
+			if (burst > 0 && buf[i] == 128) {
+				if (burst > 2)
+					burst -= 2;
+				else
+					burst--;
+				if (burst == 0)
+					start = 0;
+			}
+			prev = 128;
 		}
 	}
 
