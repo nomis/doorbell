@@ -36,6 +36,7 @@ extern void process_input(unsigned char *buf, int buflen, unsigned long long sam
 struct ring {
 	unsigned long long now;
 	unsigned long long file;
+	unsigned long long last;
 	int ring;
 	struct ring *next;
 };
@@ -43,14 +44,24 @@ struct ring {
 static unsigned long long file = 0;
 static struct ring *invalid_t = NULL;
 static struct ring *valid_t = NULL;
+static struct ring *ignore_t = NULL;
 static struct ring *invalid_h = NULL;
 static struct ring *valid_h = NULL;
+static struct ring *ignore_h = NULL;
 
 void do_ring(unsigned long long last, unsigned long long now) {
-	struct ring *tmp = valid_h;
+	struct ring *tmp;
 	int ok = 0;
 	(void)last;
 
+	tmp = ignore_h;
+	while (tmp != NULL) {
+		if (tmp->now == now)
+			return;
+		tmp = tmp->next;
+	}
+
+	tmp = valid_h;
 	while (tmp != NULL) {
 		if (tmp->now == now) {
 			tmp->ring++;
@@ -74,6 +85,7 @@ void do_ring(unsigned long long last, unsigned long long now) {
 		tmp = malloc(sizeof(*tmp));
 		tmp->next = NULL;
 		tmp->file = file;
+		tmp->last = now - last;
 		tmp->ring = 1;
 		tmp->now = now;
 		if (invalid_h == NULL) {
@@ -89,7 +101,7 @@ void do_ring(unsigned long long last, unsigned long long now) {
 
 void readfile(unsigned long long now) {
 	unsigned char buf[BUFSIZE];
-	char fname[21];
+	char fname[25];
 	int fd, status;
 
 	if (now > 0) {
@@ -106,6 +118,7 @@ void readfile(unsigned long long now) {
 		close(fd);
 	} else {
 		memset(buf, 0x80, sizeof(buf));
+		status = sizeof(buf);
 	}
 
 	file = now;
@@ -115,7 +128,7 @@ void readfile(unsigned long long now) {
 //		printf("Read %u bytes from %s\n", status, fname);
 		process_input(buf, status, now, (1000000/(RATE*(SIZE/8))), 1);
 	} else if (status == -1) {
-		perror("Read failed\n");
+		perror(fname);
 		exit(1);
 	}
 }
@@ -140,12 +153,34 @@ int main(int argc, char *argv[]) {
 		tmp->next = NULL;
 		tmp->file = 0;
 		tmp->ring = 0;
+		tmp->last = 0;
 		tmp->now = now;
 		if (valid_h == NULL) {
 			valid_h = valid_t = tmp;
 		} else {
 			valid_t->next = tmp;
 			valid_t = tmp;
+		}
+	}
+	fclose(fd);
+
+	fd = fopen("data/ignore", "r");
+	if (fd == NULL) {
+		perror("data/ignore");
+		exit(1);
+	}
+	while (fscanf(fd, "%llu", &now) == 1) {
+		tmp = malloc(sizeof(*tmp));
+		tmp->next = NULL;
+		tmp->file = 0;
+		tmp->ring = 0;
+		tmp->last = 0;
+		tmp->now = now;
+		if (ignore_h == NULL) {
+			ignore_h = ignore_t = tmp;
+		} else {
+			ignore_t->next = tmp;
+			ignore_t = tmp;
 		}
 	}
 	fclose(fd);
@@ -193,7 +228,7 @@ int main(int argc, char *argv[]) {
 		c_invalid += tmp->ring;
 
 		strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", tm);
-		printf("%llu (%s.%06llu) %llu ?\n", tmp->now, buf, tmp->now%1000000, tmp->file);
+		printf("%llu (%s.%06llu) in %llu [%llu] ?\n", tmp->now, buf, tmp->now%1000000, tmp->file, tmp->last);
 
 		tmp = tmp->next;
 	}
