@@ -233,6 +233,20 @@ int main(int argc, char *argv[]) {
 		tmp = tmp->next;
 	}
 
+	tmp = valid_h;
+	while (tmp != NULL) {
+		if (tmp->ring == 0) {
+			char buf[256];
+			time_t timep = tmp->now/1000000;
+			struct tm *tm = localtime(&timep);
+
+			strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", tm);
+			printf("%llu (%s.%06llu) !\n", tmp->now, buf, tmp->now%1000000);
+		}
+
+		tmp = tmp->next;
+	}
+
 	printf("Hit: %5d\nDup: %5d\nMiss: %4d\nInv: %5d\n", c_hit, c_dup, c_miss, c_invalid);
 
 	return 0;
