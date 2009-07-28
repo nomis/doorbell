@@ -25,8 +25,11 @@
 #include <time.h>
 
 static unsigned long long last = ~0ULL;
+static unsigned long long slast = ~0ULL;
 static unsigned long long start = 0;
 static unsigned long long burst = 0;
+static unsigned long long positive = 0;
+static unsigned long long negative = 0;
 static unsigned char prev = 128;
 
 #define SAVE 1
@@ -55,19 +58,24 @@ void process_input(unsigned char *buf, int buflen, unsigned long long sampletime
 		if (buf[i] < 126 || buf[i] > 130) {
 			if (start == 0)
 				start = now;
+			if (buf[i] < 128)
+				positive++;
+			if (buf[i] > 128)
+				negative++;
 			if (buf[i] != prev)
 				burst++;
 			prev = buf[i];
-			if (burst < 25)
+			if (burst < 25 || !positive || !negative)
 				continue;
 
 			/* ding dong! */
-			if (now > last && now - last >= 400000) {
+			if (now > last && now - last >= 400000 && start - slast >= 400000) {
 				if (!test)
 					printf(", gap %llu", now - last);
 				ring++;
 
-				do_ring(last, start);
+				do_ring(slast, start);
+				slast = start;
 				start = 0;
 			}
 			last = now;
@@ -77,8 +85,11 @@ void process_input(unsigned char *buf, int buflen, unsigned long long sampletime
 					burst -= 2;
 				else
 					burst--;
-				if (burst == 0)
+				if (burst == 0) {
 					start = 0;
+					positive = 0;
+					negative = 0;
+				}
 			}
 			prev = 128;
 		}
