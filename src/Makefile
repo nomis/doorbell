@@ -1,14 +1,20 @@
-OBJS=alsa.o time.o exec.o process.o
+OBJS=time.o exec.o process.o
 TEST_OBJS=test.o time.o process.o
-CFLAGS=-Wall -Wshadow -Wextra -ggdb -lasound
+CFLAGS=-Wall -Wshadow -Wextra -ggdb
+LDFLAGS=
+
+OBJS+=oss.o
+
+#OBJS+=alsa.o
+#LDFLAGS+=-lasound
 
 all: doorbelld test
 
 doorbelld: $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $(OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJS)
 
 test: $(TEST_OBJS)
-	$(CC) $(CFLAGS) -o $@ $(TEST_OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(TEST_OBJS)
 
 clean:
 	rm -f doorbelld test *.o
