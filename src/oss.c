@@ -1,5 +1,5 @@
 /*
- * Copyright ©2009  Simon Arlott
+ * Copyright ©2010  Simon Arlott
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License (Version 2) as
@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <linux/soundcard.h>
 
-#define LENGTH (2<<14)	/* how many samples of audio to store */
+#define LENGTH (2<<12)	/* how many samples of audio to store */
 #define RATE 8000	/* the sampling rate */
 #define SIZE 8		/* sample size: 8 or 16 bits */
 #define CHANNELS 1	/* 1 = mono 2 = stereo */
@@ -77,6 +77,7 @@ int main(int argc, char *argv[]) {
 			process_input(buf, status, now, (1000000/(RATE*(SIZE/8))), 0);
 		} else if (status == -1) {
 			perror("Read failed");
+			exit(1);
 		}
 	}
 }
