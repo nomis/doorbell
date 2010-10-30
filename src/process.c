@@ -69,7 +69,7 @@ void process_input(unsigned char *buf, int buflen, unsigned long long sampletime
 				continue;
 
 			/* ding dong! */
-			if (now > last && now - last >= 400000 && start - slast >= 400000) {
+			if (now > last && now - last >= 500000 && start - slast >= 500000) {
 				if (!test)
 					printf(", gap %llu", now - last);
 				ring++;

@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <alsa/asoundlib.h>
 
-#define LENGTH (2<<12)	/* how many samples of audio to store */
+#define LENGTH (2<<14)	/* how many samples of audio to store */
 #define RATE 8000	/* the sampling rate */
 #define SIZE 8		/* sample size: 8 or 16 bits */
 #define CHANNELS 1	/* 1 = mono 2 = stereo */
