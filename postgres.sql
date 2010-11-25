@@ -29,6 +29,8 @@ ALTER TABLE ONLY dingdong
 ALTER TABLE ONLY dingdong
 	ADD CONSTRAINT dingdong_doorbell_fkey FOREIGN KEY (doorbell) REFERENCES doorbells(id);
 
+CREATE INDEX dingdong_notify ON dingdong (doorbell, start) WHERE notify = 'f';
+
 CREATE RULE notify_delete AS ON DELETE TO dingdong DO NOTIFY changed;
 
 CREATE RULE notify_insert AS ON INSERT TO dingdong DO NOTIFY changed;
