@@ -1,4 +1,7 @@
-src/*.o
-src/dingdong
-src/doorbelld
-src/test
+dingdong
+doorbellmon
+doorbelldb
+doorbellfake
+*.pyc
+*.pyo
+*.o
