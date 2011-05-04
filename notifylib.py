@@ -70,7 +70,6 @@ class DB:
 	def listen(self):
 		try:
 			c = self.db.cursor()
-			c.execute("SET TIME ZONE 0")
 			c.execute("LISTEN changed")
 			c.close()
 		except pg.DatabaseError, e:
