@@ -23,8 +23,9 @@ class Execer:
 			print("Return code: {0}".format(process.returncode))
 		
 			self.log("{0} [{1}]".format(ts, process.returncode))
-			for msg in stderr.split("\n"):
-				self.log("  {0}".format(msg))
+			if stderr != "":
+				for msg in stderr.split("\n"):
+					self.log("  {0}".format(msg))
 			return process.returncode == EXIT_SUCCESS
 		except OSError, e:
 			print(e)
