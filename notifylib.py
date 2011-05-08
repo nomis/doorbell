@@ -137,7 +137,7 @@ class DB:
 			while notify is None:
 				if self.db._cnx.fileno() < 0:
 					raise self.Reconnect
-				(l, r, x) = select.select([self.db._cnx], [], [self.db._cnx], 0)
+				select.select([self.db._cnx], [], [self.db._cnx])
 				notify = self.db._cnx.getnotify()
 			print("Notified")
 		except self.Reconnect:
