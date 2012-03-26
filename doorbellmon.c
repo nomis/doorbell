@@ -95,9 +95,10 @@ static void report(bool on) {
 	mq_send(q, (const char *)&press, sizeof(press), 0);
 }
 
-static void check(void) {
+static bool check(void) {
 	static bool first = true;
 	static int last;
+	bool changed = false;
 	int state;
 
 	cerror("Failed to get serial IO status", ioctl(fd, TIOCMGET, &state) != 0);
@@ -106,11 +107,14 @@ static void check(void) {
 	if (first) {
 		first = false;
 	} else {
-		if (last != state)
+		if (last != state) {
+			changed = true;
 			report(state != 0);
+		}
 	}
 
 	last = state;
+	return changed;
 }
 
 static bool wait(void) {
@@ -122,7 +126,8 @@ static bool wait(void) {
 
 static void loop(void) {
 	do {
-		check();
+		while (check())
+			usleep(CHECK_INTERVAL);
 	} while (wait());
 }
 
