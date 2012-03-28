@@ -212,6 +212,11 @@ static bool __press_on(const struct timeval *on, const struct timeval *off) {
 	return press_on(on);
 }
 
+static bool __press_cancel(const struct timeval *on, const struct timeval *off) {
+	(void)off;
+	return press_cancel(on);
+}
+
 static bool __press_resume(const struct timeval *on, const struct timeval *off) {
 	(void)off;
 	return press_resume(on);
@@ -240,16 +245,33 @@ static void save_on(void) {
 }
 
 static void save_on_off(void) {
+	bool ignore;
 	assert(count == 2);
 	assert(press[0].on);
 	assert(!press[1].on);
 
+	ignore = (tv_to_ull(press[2].tv) - tv_to_ull(press[1].tv) < MIN_PRESS);
+
 	if (process_on) {
-		_printf("process on+off press\n");
-		save(press_on_off);
+		if (ignore) {
+			_printf("cancelling short on+off press\n");
+			save(__press_cancel);
+
+			backup_clear();
+		} else {
+			_printf("process on+off press\n");
+			save(press_on_off);
+		}
 	} else {
-		_printf("process off press\n");
-		save(press_off);
+		if (ignore) {
+			_printf("cancelling short press\n");
+			save(__press_cancel);
+
+			backup_clear();
+		} else {
+			_printf("process off press\n");
+			save(press_off);
+		}
 	}
 }
 
@@ -267,7 +289,17 @@ static void save_on_off_on(void) {
 		press_t keep;
 
 		if (process_on) {
-			_printf("fixing interrupted press\n");
+			ignore = (tv_to_ull(press[1].tv) - tv_to_ull(press[0].tv) < MIN_PRESS);
+
+			if (ignore) {
+				_printf("cancelling short on+off press\n");
+				save(__press_cancel);
+
+				/* keep the third press and ignore the other two */
+				press[0] = press[2];
+			} else {
+				_printf("fixing interrupted press\n");
+			}
 		} else {
 			_printf("resuming interrupted press\n");
 		}

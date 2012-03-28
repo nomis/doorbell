@@ -56,6 +56,10 @@ static bool db_connect(void) {
 			if (PQresultStatus(res) != PGRES_COMMAND_OK) goto fail;
 			PQclear(res);
 
+			res = PQprepare(conn, "press_cancel", "DELETE FROM dingdong WHERE doorbell = $1 and start = to_timestamp($2)", 2, NULL);
+			if (PQresultStatus(res) != PGRES_COMMAND_OK) goto fail;
+			PQclear(res);
+
 			res = PQprepare(conn, "press_resume", "UPDATE dingdong SET stop = NULL WHERE doorbell = $1 and start = to_timestamp($2)", 2, NULL);
 			if (PQresultStatus(res) != PGRES_COMMAND_OK) goto fail;
 			PQclear(res);
@@ -92,6 +96,9 @@ static void db_disconnect(void) {
 		PQclear(res);
 
 		res = PQexec(conn, "DEALLOCATE PREPARE press_on_off");
+		PQclear(res);
+
+		res = PQexec(conn, "DEALLOCATE PREPARE press_cancel");
 		PQclear(res);
 
 		res = PQexec(conn, "DEALLOCATE PREPARE press_resume");
@@ -197,6 +204,29 @@ bool press_on_off(const struct timeval *on, const struct timeval *off) {
 	res = PQexecPrepared(conn, "press_on_off", 3, param, NULL, NULL, 0);
 	if (PQresultStatus(res) != PGRES_COMMAND_OK) {
 		_printf("press_on_off: %s", PQerrorMessage(conn));
+
+		PQclear(res);
+		db_disconnect();
+		return false;
+	} else {
+		PQclear(res);
+		return true;
+	}
+}
+
+bool press_cancel(const struct timeval *on) {
+	PGresult *res;
+	char tmp[1][32];
+	const char *param[3] = { doorbell, tmp[0] };
+
+	if (!db_connect())
+		return false;
+
+	sprintf(tmp[0], "%lu.%06u", (unsigned long int)on->tv_sec, (unsigned int)on->tv_usec);
+
+	res = PQexecPrepared(conn, "press_cancel", 2, param, NULL, NULL, 0);
+	if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+		_printf("press_cancel: %s", PQerrorMessage(conn));
 
 		PQclear(res);
 		db_disconnect();

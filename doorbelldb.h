@@ -24,4 +24,5 @@ void select_doorbell(const char *value);
 bool press_on(const struct timeval *on);
 bool press_off(const struct timeval *on, const struct timeval *off);
 bool press_on_off(const struct timeval *on, const struct timeval *off);
+bool press_cancel(const struct timeval *on);
 bool press_resume(const struct timeval *on);
