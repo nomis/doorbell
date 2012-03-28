@@ -250,7 +250,7 @@ static void save_on_off(void) {
 	assert(press[0].on);
 	assert(!press[1].on);
 
-	ignore = (tv_to_ull(press[2].tv) - tv_to_ull(press[1].tv) < MIN_PRESS);
+	ignore = (tv_to_ull(press[1].tv) - tv_to_ull(press[0].tv) < MIN_PRESS);
 
 	if (process_on) {
 		if (ignore) {
