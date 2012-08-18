@@ -37,7 +37,7 @@ static void init_root(void) {
 
 		cerror("Failed to lock memory pages", mlockall(MCL_CURRENT | MCL_FUTURE));
 		cerror("Failed to get max scheduler priority", (schedp.sched_priority = sched_get_priority_max(SCHED_FIFO)) < 0);
-		schedp.sched_priority -= 20;
+		schedp.sched_priority -= 25;
 		cerror("Failed to set scheduler policy", sched_setscheduler(0, SCHED_FIFO, &schedp));
 		cerror("Failed to drop SGID permissions", setregid(getgid(), getgid()));
 		cerror("Failed to drop SUID permissions", setreuid(getuid(), getuid()));
