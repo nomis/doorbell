@@ -1,4 +1,5 @@
 #include <sys/ioctl.h>
+#include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/types.h>
@@ -34,6 +35,7 @@ static void init_root(void) {
 	if (geteuid() == 0) {
 		struct sched_param schedp;
 
+		cerror("Failed to lock memory pages", mlockall(MCL_CURRENT | MCL_FUTURE));
 		cerror("Failed to get max scheduler priority", (schedp.sched_priority = sched_get_priority_max(SCHED_FIFO)) < 0);
 		schedp.sched_priority -= 20;
 		cerror("Failed to set scheduler policy", sched_setscheduler(0, SCHED_FIFO, &schedp));
