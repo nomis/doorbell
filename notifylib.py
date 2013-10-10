@@ -191,7 +191,7 @@ class Handler:
 				if ok != False:
 					self.wait_for_ring()
 				# allow some time for invalid readings to be reverted
-				#time.sleep(2)
+				time.sleep(0.5)
 			except DB.Reconnect:
 				time.sleep(5)
 				while not self.db.connect():
