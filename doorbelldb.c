@@ -109,7 +109,7 @@ static void init(void) {
 		.mq_msgsize = sizeof(press_t)
 	};
 
-	qmain = mq_open(mqueue_main, O_RDONLY|O_CREAT, S_IRUSR|S_IWUSR, &qmain_attr);
+	qmain = mq_open(mqueue_main, O_RDONLY|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP, &qmain_attr);
 	cerror(mqueue_main, qmain < 0);
 
 	qbackup = mq_open(mqueue_backup, O_RDWR|O_NONBLOCK|O_CREAT, S_IRUSR|S_IWUSR, &qbackup_attr);
