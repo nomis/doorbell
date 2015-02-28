@@ -175,6 +175,13 @@ static void backup_load(void) {
 	 * this may happen if the backup queue is partially cleared
 	 */
 
+	/* invalid [any, on, off] */
+	if (loaded == 3 && press[1].on) {
+		press[0] = press[1];
+		press[1] = press[2];
+		loaded = 2;
+	}
+
 	/* from [on, off, on] to [off, on] instead of [on] */
 	if (loaded == 2 && !press[0].on) {
 		press[0] = press[1];
@@ -373,10 +380,12 @@ static void handle_press(void) {
 
 			count++;
 		} else { /* duplicate on press */
+			_printf("duplicate on press\n");
 			backup_clear();
+			press[0] = press[1];
 			backup_press();
 
-			press[0] = press[1];
+			count++;
 			process_on = true;
 		}
 	} else {
