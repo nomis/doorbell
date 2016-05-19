@@ -26,6 +26,7 @@ mqd_t qmain, qbackup;
 bool process_on = true;
 press_t press[PRESS_CACHE];
 int count = 0;
+bool reset_flag = false;
 #ifdef SYSLOG
 char *ident;
 #endif
@@ -150,7 +151,7 @@ static void backup_clear(void) {
 }
 
 static void backup_load(void) {
-	int ret, loaded = 0;
+	int ret, i, loaded = 0;
 
 	/* critical section:
 	 *
@@ -167,6 +168,17 @@ static void backup_load(void) {
 		} else {
 			_printf("read %d %lu.%06u %d from backup queue\n", loaded, (unsigned long int)press[loaded].tv.tv_sec, (unsigned int)press[loaded].tv.tv_usec, press[loaded].on);
 			loaded++;
+		}
+	}
+
+	for (i = 0; i < loaded; i++) {
+		if (press[i].tv.tv_sec == 0) {
+			_printf("reset pending\n");
+			reset_flag = true;
+			if (i < loaded - 1)
+				press[i] = press[i + 1];
+			loaded--;
+			i--;
 		}
 	}
 
@@ -365,7 +377,13 @@ static void save_on_off_on(void) {
 }
 
 static void handle_press(void) {
-	if (count == 0) {
+	if (press[count].tv.tv_sec == 0) {
+		backup_press();
+		count++;
+
+		_printf("reset pending\n");
+		reset_flag = true;
+	} if (count == 0) {
 		/* no data */
 		if (press[count].on) { /* new on press */
 			backup_press();
@@ -472,6 +490,14 @@ static void loop(void) {
 		_printf("main loop %d\n", count);
 		assert(count >= 0);
 		assert(count <= PRESS_CACHE);
+
+		if (reset_flag) {
+			_printf("reset complete\n");
+			reset_flag = false;
+
+			backup_clear();
+			count = 0;
+		}
 
 		switch (count) {
 		case 0: /* no data */
