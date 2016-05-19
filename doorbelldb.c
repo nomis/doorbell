@@ -383,7 +383,7 @@ static void handle_press(void) {
 
 		_printf("reset pending\n");
 		reset_flag = true;
-	} if (count == 0) {
+	} else if (count == 0) {
 		/* no data */
 		if (press[count].on) { /* new on press */
 			backup_press();
