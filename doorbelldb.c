@@ -497,6 +497,7 @@ static void loop(void) {
 
 			backup_clear();
 			count = 0;
+			continue;
 		}
 
 		switch (count) {
