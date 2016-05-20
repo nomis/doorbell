@@ -1,0 +1,19 @@
+Source: doorbell
+Section: misc
+Priority: optional
+Maintainer: Simon Arlott <ubuntu@sa.me.uk>
+Build-Depends: debhelper (>= 9), libpq-dev
+Standards-Version: 3.9.6
+
+Package: doorbell
+Architecture: any
+Depends: arduino-mux, ${misc:Depends}, ${shlibs:Depends}
+Description: Doorbell pulse/heating database manager
+ Processes doorbell button presses from arduino-mux message queue and
+ stores them in a database.
+
+Package: doorbell-dbg
+Architecture: any
+Depends: doorbell (= ${binary:Version}), ${misc:Depends}
+Description: debugging symboles for doorbell
+ This package contains the debugging symbols for doorbell

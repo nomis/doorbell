@@ -5,3 +5,10 @@ doorbellfake
 *.pyc
 *.pyo
 *.o
+debian/doorbell.debhelper.log
+debian/doorbell.substvars
+debian/doorbell/
+debian/doorbell-dbg.debhelper.log
+debian/doorbell-dbg.substvars
+debian/doorbell-dbg/
+debian/files
