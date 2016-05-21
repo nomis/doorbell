@@ -1,3 +1,9 @@
+doorbell (2-1) xenial; urgency=medium
+
+  * Send verbose messages to syslog
+
+ -- Simon Arlott <ubuntu@sa.me.uk>  Sat, 21 May 2016 12:55:00 +0100
+
 doorbell (1-1) xenial; urgency=medium
 
   * Don't fork

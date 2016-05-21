@@ -9,9 +9,14 @@
  */
 #define MIN_PRESS 21000
 
-#ifdef VERBOSE
-# ifdef FORK
+#ifdef FORK
+# ifndef SYSLOG
 #  define SYSLOG
+# endif
+#endif
+
+#ifdef VERBOSE
+# ifdef SYSLOG
 #  define _printf(...) syslog(LOG_INFO, __VA_ARGS__)
 # else
 #  define _printf(...) printf(__VA_ARGS__)
