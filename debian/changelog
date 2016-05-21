@@ -1,3 +1,9 @@
+doorbell (1-1) xenial; urgency=medium
+
+  * Don't fork
+
+ -- Simon Arlott <ubuntu@sa.me.uk>  Sat, 21 May 2016 10:44:35 +0100
+
 doorbell (0-1) xenial; urgency=medium
 
   * Initial release.
