@@ -21,7 +21,7 @@ class Execer:
 			process = subprocess.Popen([self.cmd, ts], stdin=open(os.devnull), stdout=open(os.devnull), stderr=subprocess.PIPE)
 			stdout, stderr = process.communicate()
 			print("Return code: {0}".format(process.returncode))
-		
+
 			self.log("{0} [{1}]".format(ts, process.returncode))
 			if stderr != "":
 				for msg in stderr.split("\n"):
