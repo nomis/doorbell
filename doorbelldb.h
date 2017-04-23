@@ -4,10 +4,10 @@
 #define tv_to_ull(x) (unsigned long long)((unsigned long long)(x).tv_sec*1000000 + (unsigned long long)(x).tv_usec)
 
 /* Avoid false presses caused by electricity noise at 50/60Hz
- * 1s / 50Hz + 5% = 21000µs
- * 1s / 60Hz + 5% = 17500µs
+ * 1s / 50Hz + 10% = 22000µs
+ * 1s / 60Hz + 10% = 18333µs
  */
-#define MIN_PRESS 21000
+#define MIN_PRESS 22000
 
 #ifdef FORK
 # ifndef SYSLOG

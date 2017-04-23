@@ -1,3 +1,9 @@
+doorbell (3) xenial; urgency=medium
+
+  * Increase minimum press duration to protect against electrical noise
+
+ -- Simon Arlott <ubuntu@sa.me.uk>  Sun, 23 Apr 2017 19:58:34 +0100
+
 doorbell (2-1) xenial; urgency=medium
 
   * Send verbose messages to syslog
