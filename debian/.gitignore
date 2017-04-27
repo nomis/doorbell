@@ -1,0 +1,12 @@
+doorbell.debhelper.log
+doorbell.substvars
+doorbell/
+doorbell-dbg.debhelper.log
+doorbell-dbg.substvars
+doorbell-dbg/
+doorbell-python2.debhelper.log
+doorbell-python2.substvars
+doorbell-python2/
+debhelper-build-stamp
+files
+tmp

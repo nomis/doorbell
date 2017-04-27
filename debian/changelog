@@ -1,3 +1,9 @@
+doorbell (4) xenial; urgency=medium
+
+  * Add python scripts package
+
+ -- Simon Arlott <ubuntu@sa.me.uk>  Thu, 27 Apr 2017 18:59:34 +0100
+
 doorbell (3) xenial; urgency=medium
 
   * Increase minimum press duration to protect against electrical noise

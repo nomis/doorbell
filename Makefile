@@ -16,6 +16,9 @@ libdir=$(exec_prefix)/lib
 install: all
 	$(INSTALL) -m 755 -D doorbelldb $(DESTDIR)$(libdir)/arduino-mux/doorbelldb
 	$(INSTALL) -m 755 -D doorbellfake $(DESTDIR)$(libdir)/arduino-mux/doorbellfake
+	$(INSTALL) -m 755 -D notifylib.py $(DESTDIR)$(libdir)/doorbell/notifylib.py
+	$(INSTALL) -m 755 -D doorbellnotify.py $(DESTDIR)$(libdir)/doorbell/doorbellnotify.py
+
 
 doorbellmon: doorbellmon.c doorbellmon.h doorbellq.h Makefile
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< $(MQ_LIBS)
