@@ -1,3 +1,9 @@
+doorbell (4-1) bionic; urgency=medium
+
+  * Update for bionic
+
+ -- Simon Arlott <ubuntu@sa.me.uk>  Sun, 19 Apr 2020 15:20:59 +0100
+
 doorbell (4) xenial; urgency=medium
 
   * Add python scripts package
