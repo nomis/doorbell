@@ -1,3 +1,9 @@
+doorbell (5) bionic; urgency=medium
+
+  * Convert datetime to string
+
+ -- Simon Arlott <ubuntu@sa.me.uk>  Thu, 22 Apr 2021 11:44:40 +0100
+
 doorbell (4-1) bionic; urgency=medium
 
   * Update for bionic

@@ -18,7 +18,7 @@ class Execer:
 
 	def ring(self, ts):
 		try:
-			process = subprocess.Popen([self.cmd, ts], stdin=open(os.devnull), stdout=open(os.devnull), stderr=subprocess.PIPE)
+			process = subprocess.Popen([self.cmd, str(ts)], stdin=open(os.devnull), stdout=open(os.devnull), stderr=subprocess.PIPE)
 			stdout, stderr = process.communicate()
 			print("Return code: {0}".format(process.returncode))
 
