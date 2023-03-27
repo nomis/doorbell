@@ -1,3 +1,9 @@
+doorbell (5-1) focal; urgency=medium
+
+  * Update for focal
+
+ -- Simon Arlott <ubuntu@sa.me.uk>  Mon, 27 Mar 2023 19:24:50 +0100
+
 doorbell (5) bionic; urgency=medium
 
   * Convert datetime to string

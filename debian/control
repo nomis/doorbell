@@ -2,8 +2,8 @@ Source: doorbell
 Section: misc
 Priority: optional
 Maintainer: Simon Arlott <ubuntu@sa.me.uk>
-Build-Depends: debhelper (>= 9), libpq-dev
-Standards-Version: 3.9.6
+Build-Depends: debhelper (>= 12), libpq-dev
+Standards-Version: 4.1.4
 
 Package: doorbell
 Architecture: any
