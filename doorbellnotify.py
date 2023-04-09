@@ -1,7 +1,5 @@
-#!/usr/bin/env python2
-# coding=utf8
+#!/usr/bin/env python3
 
-from __future__ import print_function
 import argparse
 import daemon
 import notifylib
@@ -9,7 +7,7 @@ import os
 import subprocess
 import sys
 
-EXIT_SUCCESS, EXIT_FAILURE = range(0, 2)
+EXIT_SUCCESS, EXIT_FAILURE = list(range(0, 2))
 
 class Execer:
 	def __init__(self, cmd):
@@ -27,7 +25,7 @@ class Execer:
 				for msg in stderr.split("\n"):
 					self.log("  {0}".format(msg))
 			return process.returncode == EXIT_SUCCESS
-		except OSError, e:
+		except OSError as e:
 			print(e)
 
 			self.log("{0} {1}".format(ts, e))

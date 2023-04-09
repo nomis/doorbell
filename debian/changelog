@@ -1,3 +1,9 @@
+doorbell (6) focal; urgency=medium
+
+  * Update for python3
+
+ -- Simon Arlott <ubuntu@sa.me.uk>  Sun, 09 Apr 2023 15:04:32 +0100
+
 doorbell (5-1) focal; urgency=medium
 
   * Update for focal

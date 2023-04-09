@@ -1,8 +1,3 @@
-#!/usr/bin/env python2
-# coding=utf8
-
-from __future__ import division
-from __future__ import print_function
 import datetime
 import pg
 import pgdb
@@ -59,7 +54,7 @@ class DB:
 				self.db = pgdb.connect()
 				self.listen()
 				self.commit()
-		except pg.DatabaseError, e:
+		except pg.DatabaseError as e:
 			self.abort(e)
 			return False
 		except self.Reconnect:
@@ -72,7 +67,7 @@ class DB:
 			c = self.db.cursor()
 			c.execute("LISTEN changed")
 			c.close()
-		except pg.DatabaseError, e:
+		except pg.DatabaseError as e:
 			self.abort(e)
 			raise self.Reconnect
 
@@ -84,7 +79,7 @@ class DB:
 			c.execute(query, data)
 			data = c.fetchall()
 			c.close()
-		except pg.DatabaseError, e:
+		except pg.DatabaseError as e:
 			self.abort(e)
 			raise self.Reconnect
 		else:
@@ -102,7 +97,7 @@ class DB:
 			c.execute(query, data)
 			rows = c.rowcount
 			c.close()
-		except pg.DatabaseError, e:
+		except pg.DatabaseError as e:
 			self.abort(e)
 			raise self.Reconnect
 		else:
@@ -113,7 +108,7 @@ class DB:
 			raise self.Reconnect
 		try:
 			self.db.commit()
-		except pg.DatabaseError, e:
+		except pg.DatabaseError as e:
 			self.abort(e)
 			raise self.Reconnect
 
@@ -122,7 +117,7 @@ class DB:
 			raise self.Reconnect
 		try:
 			self.db.rollback()
-		except pg.DatabaseError, e:
+		except pg.DatabaseError as e:
 			self.abort(e)
 			raise self.Reconnect
 
@@ -143,7 +138,7 @@ class DB:
 		except self.Reconnect:
 			self.abort()
 			raise self.Reconnect
-		except pg.DatabaseError, e:
+		except pg.DatabaseError as e:
 			self.abort(e)
 			raise self.Reconnect
 

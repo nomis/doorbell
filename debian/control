@@ -18,8 +18,8 @@ Depends: doorbell (= ${binary:Version}), ${misc:Depends}
 Description: debugging symbols for doorbell
  This package contains the debugging symbols for doorbell
 
-Package: doorbell-python2
+Package: doorbell-python3
 Architecture: any
-Depends: ${misc:Depends}, python (>= 2.7.11), python-daemon (>= 2.0.5), python-pygresql (>= 1:4.0)
+Depends: ${misc:Depends}, python3 (>= 3.8.2), python3-daemon (>= 2.0.5), python3-pygresql (>= 1:4.0)
 Description: Doorbell press notifier
  Processes doorbell button presses from a database and calls a notification script.
