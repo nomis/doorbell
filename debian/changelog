@@ -1,3 +1,9 @@
+doorbell (7) focal; urgency=medium
+
+  * Fix process stdio encoding
+
+ -- Simon Arlott <ubuntu@sa.me.uk>  Sun, 09 Apr 2023 20:17:50 +0100
+
 doorbell (6) focal; urgency=medium
 
   * Update for python3
