@@ -89,8 +89,10 @@ static void daemon(void) {
 
 static void report(bool on) {
 	press_t press;
+	struct timeval tv;
 
-	gettimeofday(&press.tv, NULL);
+	gettimeofday(&tv, NULL);
+	press.tv = tv;
 	press.on = on;
 
 	_printf("%lu.%06u: %d\n", (unsigned long int)press.tv.tv_sec, (unsigned int)press.tv.tv_usec, press.on);

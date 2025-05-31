@@ -245,8 +245,10 @@ static bool __press_resume(const struct timeval *on, const struct timeval *off) 
 
 static void save(bool (*func)(const struct timeval *, const struct timeval *)) {
 	int backoff = 1;
+	struct timeval on = press[0].tv;
+	struct timeval off = press[1].tv;
 
-	while (!func(&press[0].tv, &press[1].tv)) {
+	while (!func(&on, &off)) {
 		sleep(backoff);
 
 		if (backoff < 256)
