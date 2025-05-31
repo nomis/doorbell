@@ -12,8 +12,8 @@
 # include <syslog.h>
 #endif
 
-PGconn *conn = NULL;
-const char *doorbell;
+static PGconn *conn = NULL;
+static const char *doorbell;
 
 void select_doorbell(const char *value) {
 	char *end = NULL;

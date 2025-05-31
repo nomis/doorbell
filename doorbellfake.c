@@ -11,10 +11,10 @@
 #include "doorbellfake.h"
 #include "doorbellq.h"
 
-char *mqueue;
-struct timeval tv;
-bool on;
-mqd_t q;
+static char *mqueue;
+static struct timeval tv;
+static bool on;
+static mqd_t q;
 
 static void setup(int argc, char *argv[]) {
 	unsigned long secs;

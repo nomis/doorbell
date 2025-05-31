@@ -19,32 +19,31 @@
 
 #define PRESS_CACHE 3
 
-char *mqueue_main;
-char *mqueue_backup;
-unsigned long int doorbell;
-mqd_t qmain, qbackup;
-bool process_on = true;
-press_t press[PRESS_CACHE];
-int count = 0;
-bool reset_flag = false;
+static char *mqueue_main;
+static char *mqueue_backup;
+static mqd_t qmain, qbackup;
+static bool process_on = true;
+static press_t press[PRESS_CACHE];
+static int count = 0;
+static bool reset_flag = false;
 #ifdef SYSLOG
-char *ident;
+static char *ident;
 #endif
 
-void handle_signal(int sig);
+static void handle_signal(int sig);
 
-struct sigaction sa_ign = { /* handle signals, but store them for later */
+static struct sigaction sa_ign = { /* handle signals, but store them for later */
 	.sa_handler = handle_signal,
 	.sa_flags = 0
 };
-struct sigaction sa_dfl = { /* use default signal handler */
+static struct sigaction sa_dfl = { /* use default signal handler */
 	.sa_handler = SIG_DFL,
 	.sa_flags = 0
 };
-sigset_t die_signals;
-int waiting_sig = 0;
+static sigset_t die_signals;
+static int waiting_sig = 0;
 
-void handle_signal(int sig) {
+static void handle_signal(int sig) {
 	if (waiting_sig == 0)
 		waiting_sig = sig;
 }

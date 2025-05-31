@@ -16,10 +16,10 @@
 #include "doorbellmon.h"
 #include "doorbellq.h"
 
-char *device;
-char *mqueue;
-int fd;
-mqd_t q;
+static char *device;
+static char *mqueue;
+static int fd;
+static mqd_t q;
 
 static void setup(int argc, char *argv[]) {
 	if (argc != 3) {
