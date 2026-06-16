@@ -18,8 +18,14 @@ queue = posix_ipc.MessageQueue("/doorbell", flags=posix_ipc.O_CREAT, max_message
 last = False
 
 def on_connect(client, userdata, flags, reason_code, properties=None):
-	if reason_code == 0:
-		client.subscribe("door/main/buzzer")
+	syslog.syslog("connected")
+	client.subscribe("door/main/buzzer")
+
+def on_connect_fail(client, userdata):
+	syslog.syslog("connection failed")
+
+def on_disconnect(client, userdata, flags, reason_code, properties=None):
+	syslog.syslog("disconnected")
 
 def on_message(client, userdata, message):
 	global last
@@ -37,6 +43,8 @@ def on_message(client, userdata, message):
 
 mqttc = mqtt.Client()
 mqttc.on_connect = on_connect
+mqttc.on_connect_fail = on_connect_fail
+mqttc.on_disconnect = on_disconnect
 mqttc.on_message = on_message
 mqttc.username_pw_set(config["username"], config["password"])
 mqttc.connect(config["hostname"], keepalive=10)
