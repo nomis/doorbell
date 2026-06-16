@@ -7,7 +7,7 @@ Standards-Version: 4.1.4
 
 Package: doorbell
 Architecture: any
-Depends: arduino-mux, ${misc:Depends}, ${shlibs:Depends}
+Depends: arduino-mux, ${misc:Depends}, ${shlibs:Depends}, python3-posix-ipc, python3-paho-mqtt
 Description: Doorbell press database manager
  Processes doorbell button presses from arduino-mux message queue and
  stores them in a database.
